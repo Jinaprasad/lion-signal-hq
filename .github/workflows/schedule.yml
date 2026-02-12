@@ -36,16 +36,10 @@ jobs:
           echo "🦁 Starting LION SIGNAL HQ..."
           python main.py
       
-      - name: Commit and Push updated database
+    - name: Commit and Push updated database
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Check if the file exists before adding
-          if [ -f lion_signal.db ]; then
-            git add lion_signal.db
-            git commit -m "🦁 Auto-update: $(date)" || echo "No changes to commit"
-            git push origin main
-          else
-            echo "Error: lion_signal.db not found!"
-            exit 1
-          fi
+          git add lion_signal.db || echo "No new data to add"
+          git commit -m "🦁 Lion Hunt Update: $(date)" || echo "No changes"
+          git push origin main
