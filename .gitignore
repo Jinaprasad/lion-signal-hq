@@ -1,0 +1,30 @@
+# Environment variables (NEVER share your API keys!)
+.env
+
+# Python stuff
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Database (GitHub will create its own)
+lion_signal.db
+*.db
+
+# IDE stuff
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS stuff
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
