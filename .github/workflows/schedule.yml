@@ -38,7 +38,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add lion_signal.db || true
-          git commit -m "🦁 Auto-update: $(date)" || echo "No changes to commit"
+          git commit -m "🦁 Auto-update: $(date)" || echo "No changes"
           git push || echo "Nothing to push"
         continue-on-error: true
       
@@ -48,59 +48,3 @@ jobs:
           name: lion-signal-database
           path: lion_signal.db
           retention-days: 7
-```
-
-4. Scroll down and click **"Commit changes"**
-
-✅ This file tells GitHub to run your scraper every 30 minutes!
-
----
-
-### Step 2: Add the Dashboard HTML
-
-1. Click **"Add file"** → **"Create new file"** again
-2. In the filename box, type: `templates/dashboard.html`
-3. This file is LONG - I'll give you a link to download it:
-
-**Download the dashboard.html file I created earlier** (it's in the files I shared with you above - the one that says "lion signal preview")
-
-OR I can give you a simplified version. Let me know!
-
----
-
-### Step 3: Add .gitignore (Optional but Recommended)
-
-1. Click **"Add file"** → **"Create new file"**
-2. Filename: `.gitignore`
-3. Paste this:
-```
-.env
-__pycache__/
-*.pyc
-*.db
-.DS_Store
-*.log
-```
-
-4. Commit changes
-
----
-
-## ✅ AFTER ADDING THESE FILES
-
-Your repository should have:
-```
-✅ BUILD_COMPLETE.md
-✅ README.md
-✅ SETUP_GUIDE.md
-✅ analyzer.py
-✅ app.py
-✅ config.py
-✅ database.py
-✅ main.py
-✅ requirements.txt
-✅ scraper.py
-✅ test_system.py
-✅ .github/workflows/schedule.yml  ← ADD THIS!
-✅ templates/dashboard.html        ← ADD THIS!
-✅ .gitignore                      ← ADD THIS (optional)
