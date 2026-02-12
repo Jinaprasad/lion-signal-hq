@@ -1,36 +1,29 @@
-<script>
-    async function loadData() {
-        try {
-            const response = await fetch('/api/announcements');
-            const data = await response.json();
-            const list = document.getElementById('announcements-list');
-            
-            if (data.length === 0) {
-                list.innerHTML = '<div class="loading"><h1>No Signals Found</h1><p>Scraper is running, please wait 60s...</p></div>';
-                return;
-            }
-
-            list.innerHTML = data.map(ann => `
-                <div class="announcement-card" style="border-left: 5px solid #f39c12; margin-bottom: 15px; background: #1c2128; padding: 20px; border-radius: 8px;">
-                    <div style="display: flex; justify-content: space-between;">
-                        <strong style="color: #f39c12; font-size: 1.2em;">${ann.company}</strong>
-                        <span style="background: #333; padding: 2px 8px; border-radius: 4px; font-size: 0.8em;">${ann.exchange}</span>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LION SIGNAL LIVE</title>
+    <style>
+        body { background: #111; color: white; font-family: sans-serif; padding: 50px; }
+        .card { border: 2px solid #f39c12; margin: 10px; padding: 20px; background: #222; }
+    </style>
+</head>
+<body>
+    <h1>🦁 LION SIGNAL HQ: LIVE FEED</h1>
+    <div id="out">Connectng to database...</div>
+    <script>
+        fetch('/api/announcements')
+            .then(r => r.json())
+            .then(data => {
+                const out = document.getElementById('out');
+                if (data.length === 0) { out.innerHTML = "DATABASE IS EMPTY. RUN SCRAPER."; return; }
+                out.innerHTML = data.map(a => `
+                    <div class="card">
+                        <h2>${a.company}</h2>
+                        <p>${a.subject}</p>
+                        <a href="${a.pdf_link}" target="_blank" style="color:yellow">VIEW PDF</a>
                     </div>
-                    <div style="margin: 10px 0; color: #e6edf3; font-weight: 600;">${ann.subject}</div>
-                    <div style="color: #8b949e; font-size: 0.9em; margin-bottom: 15px;">${ann.ai_summary || 'Raw market feed - Analysis pending.'}</div>
-                    <a href="${ann.pdf_link}" target="_blank" style="color: #58a6ff; text-decoration: none; font-weight: bold;">📄 VIEW OFFICIAL PDF</a>
-                </div>
-            `).join('');
-            
-            // Update stats
-            const statsRes = await fetch('/api/stats');
-            const stats = await statsRes.json();
-            document.getElementById('stat-today').textContent = stats.today;
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    window.onload = loadData;
-    setInterval(loadData, 30000);
-</script>
+                `).join('');
+            }).catch(e => { document.getElementById('out').innerHTML = "ERROR: " + e; });
+    </script>
+</body>
+</html>
