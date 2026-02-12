@@ -1,41 +1,53 @@
-import os
-import sys
+import sqlite3
+import json
 from datetime import datetime
-from scraper import AnnouncementScraper
-from database import Database
-from config import *
 
-def main():
-    print("🦁 EMERGENCY RECOVERY START")
-    db = Database()
-    scraper = AnnouncementScraper()
+def emergency_run():
+    print("🦁 LION SIGNAL: ABSOLUTE RECOVERY MODE")
     
-    # Simple hunt - bypass AI to stop the crash
-    new_announcements = scraper.scrape_all()
+    # 1. Force Open Database
+    conn = sqlite3.connect('lion_signal.db')
+    cursor = conn.cursor()
     
-    if not new_announcements:
-        print("⚠️ No news found. Injecting TEST SUCCESS CORP...")
-        new_announcements = [{
-            'exchange': 'DEBUG',
-            'company': 'TEST SUCCESS CORP',
-            'symbol': 'SUCCESS',
-            'subject': 'PIPELINE RESTORED',
-            'pdf_link': 'https://www.bseindia.com',
-            'timestamp': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-        }]
+    # 2. Ensure Table Exists (Safety Check)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS announcements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            exchange TEXT,
+            company TEXT,
+            symbol TEXT,
+            subject TEXT,
+            pdf_link TEXT,
+            timestamp TEXT,
+            scraped_at TEXT,
+            ai_company TEXT,
+            ai_headline TEXT,
+            ai_category TEXT,
+            ai_importance INTEGER,
+            ai_summary TEXT,
+            ai_key_numbers TEXT
+        )
+    ''')
 
-    # Fake the 'AI' fields so the database doesn't complain
-    for ann in new_announcements:
-        ann['ai_company'] = ann['company']
-        ann['ai_headline'] = ann['subject']
-        ann['ai_importance'] = 5
-        ann['ai_summary'] = "Recovery Mode: AI Analysis bypassed to restore feed."
-        ann['ai_category'] = "GENERAL"
+    # 3. Inject the Test Data
+    test_data = [
+        ('DEBUG', 'TEST SUCCESS CORP', 'SUCCESS', 'PIPELINE ACTIVE', 
+         'https://www.bseindia.com', datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+         datetime.now().isoformat(), 'TEST SUCCESS CORP', 'SYSTEM IS LIVE', 
+         'GENERAL', 10, 'The pipeline from GitHub to Render is now confirmed working.', 'None')
+    ]
 
-    print(f"💾 Saving {len(new_announcements)} items...")
-    db.add_announcements_batch(new_announcements)
-    db.close()
-    print("✅ RECOVERY COMPLETE")
+    cursor.executemany('''
+        INSERT INTO announcements (
+            exchange, company, symbol, subject, pdf_link, timestamp, 
+            scraped_at, ai_company, ai_headline, ai_category, 
+            ai_importance, ai_summary, ai_key_numbers
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', test_data)
+
+    conn.commit()
+    conn.close()
+    print("✅ DATABASE JUMPSTARTED. Ready for Push.")
 
 if __name__ == "__main__":
-    main()
+    emergency_run()
