@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write  # This is the VIP Pass the Lion needs to save data!
+  contents: write
 
 jobs:
   scrape-and-analyze:
@@ -36,10 +36,10 @@ jobs:
           echo "🦁 Starting LION SIGNAL HQ..."
           python main.py
       
-    - name: Commit and Push updated database
+      - name: Commit and Push updated database
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add lion_signal.db || echo "No new data to add"
-          git commit -m "🦁 Lion Hunt Update: $(date)" || echo "No changes"
+          git add lion_signal.db || echo "No file created yet"
+          git commit -m "🦁 Auto-update: $(date)" || echo "No changes"
           git push origin main
