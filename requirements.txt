@@ -1,0 +1,18 @@
+# 🦁 LION SIGNAL HQ - Required Python Packages
+# =============================================
+# Install these with: pip install -r requirements.txt
+
+# For scraping websites
+requests==2.31.0
+beautifulsoup4==4.12.3
+lxml==5.1.0
+
+# For Gemini AI
+google-generativeai==0.3.2
+
+# For web server (Flask)
+Flask==3.0.0
+Flask-CORS==4.0.0
+
+# Utilities
+python-dotenv==1.0.0
