@@ -36,10 +36,10 @@ jobs:
           echo "🦁 Starting LION SIGNAL HQ..."
           python main.py
       
-      - name: Commit and Push updated database
+      - name: Force Update Database
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add lion_signal.db || echo "No file created yet"
-          git commit -m "🦁 Auto-update: $(date)" || echo "No changes"
-          git push origin main
+          git add -f lion_signal.db
+          git commit -m "DATA_UPDATE_$(date +%Y-%m-%d_%H-%M)" || echo "No changes"
+          git push origin main --force
