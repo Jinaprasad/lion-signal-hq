@@ -18,7 +18,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -36,10 +38,15 @@ jobs:
           echo "🦁 Starting LION SIGNAL HQ..."
           python main.py
       
+      - name: Upload Database Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: market_data
+          path: lion_signal.db
+
       - name: Force Update Database
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -f lion_signal.db
-          git commit -m "DATA_UPDATE_$(date +%Y-%m-%d_%H-%M)" || echo "No changes"
-          git push origin main --force
+          git add lion_signal.db
+          git diff --quiet && git diff --staged --quiet || (git commit -m "DATA_UPDATE_$(date +%Y-%m-%d_%H-%M)" && git push origin main)
